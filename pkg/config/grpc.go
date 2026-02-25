@@ -44,6 +44,9 @@ func (ImplementedCollectorServiceHandler) GetConfig(
 	// Parse comma-separated template names
 	templateNames := strings.Split(templateNamesStr, ",")
 
+	// Log which templates are being served
+	log.Printf("GetConfig: %v using templates: %s", configID, strings.Join(templateNames, ", "))
+
 	// Build config from all templates
 	var resolvedConfig strings.Builder
 	for i, name := range templateNames {
