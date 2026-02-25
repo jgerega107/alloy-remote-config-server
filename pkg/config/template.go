@@ -2,15 +2,12 @@ package config
 
 import (
 	"html/template"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 )
 
-var (
-	templates              = make(map[string]*template.Template)
-	globalStorage *Storage = nil
-)
+var templates = make(map[string]*template.Template)
 
 func LoadTemplates(path string) error {
 	files, err := filepath.Glob(filepath.Join(path, "*.conf.tmpl"))
@@ -19,7 +16,7 @@ func LoadTemplates(path string) error {
 	}
 
 	for _, file := range files {
-		content, err := ioutil.ReadFile(file)
+		content, err := os.ReadFile(file)
 		if err != nil {
 			return err
 		}

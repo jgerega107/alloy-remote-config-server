@@ -43,7 +43,6 @@ func (ImplementedCollectorServiceHandler) GetConfig(
 	if err != nil {
 		return nil, err
 	}
-	globalStorage.Set(configID, resolvedConfig.String())
 	res := connect.NewResponse(&v1.GetConfigResponse{Content: resolvedConfig.String()})
 	return res, nil
 }
@@ -53,7 +52,7 @@ func (ImplementedCollectorServiceHandler) RegisterCollector(
 	req *connect.Request[v1.RegisterCollectorRequest],
 ) (*connect.Response[v1.RegisterCollectorResponse], error) {
 	configID := req.Msg.GetId()
-	log.Printf("Register: %v [not used - agents are registered by getConfig call]", configID)
+	log.Printf("Register: %v", configID)
 	res := connect.NewResponse(&v1.RegisterCollectorResponse{})
 	return res, nil
 }
@@ -63,7 +62,7 @@ func (ImplementedCollectorServiceHandler) UnregisterCollector(
 	req *connect.Request[v1.UnregisterCollectorRequest],
 ) (*connect.Response[v1.UnregisterCollectorResponse], error) {
 	configID := req.Msg.GetId()
-	log.Printf("Unregister: %v [not used - agents are unregistered once not accessed for long time]", configID)
+	log.Printf("Unregister: %v", configID)
 	res := connect.NewResponse(&v1.UnregisterCollectorResponse{})
 	return res, nil
 }

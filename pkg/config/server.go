@@ -5,12 +5,9 @@ import (
 	"log"
 	"os"
 	"strconv"
-
-	"github.com/joho/godotenv"
 )
 
 func Start() {
-	godotenv.Load()
 	httpPort := 8080
 	httpPortEnv := os.Getenv("HTTP_PORT")
 	if len(httpPortEnv) > 0 {
@@ -34,10 +31,6 @@ func Start() {
 	err := LoadTemplates(configFolder)
 	if err != nil {
 		log.Println(fmt.Sprintf("Error loading templates: %v", err))
-	}
-	globalStorage, err = InitStorage()
-	if err != nil {
-		log.Println(fmt.Sprintf("Error loading storage: %v", err))
 	}
 	go StartConnectGrpcServer(listenAddr, grpcPort)
 	StartRestServer(listenAddr, httpPort)

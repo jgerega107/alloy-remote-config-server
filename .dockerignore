@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+.gitattributes
+.github
+
+# Documentation
+README.md
+*.md
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
+!.env.template
+
+# Build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+alloy-remote-config-server
+dist/
+
+# Test files
+*_test.go
+*.test
+
+# CI/CD
+.goreleaser.yaml
+.github/
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+docker-compose*.yaml
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp

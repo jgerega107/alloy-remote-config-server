@@ -4,7 +4,7 @@ logging {
 }
 
 remotecfg {
-    url        = "http://127.0.0.1:8888"
+    url        = "http://alloy-remote-config-server:8888"
     id         = constants.hostname
     attributes = {"name" = "example"}
 }

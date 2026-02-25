@@ -1,41 +1,36 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 func StartRestServer(listenAddr string, port int) {
-	r := gin.Default()
+	mux := http.NewServeMux()
 
-	r.GET("/templates", func(c *gin.Context) {
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"status": "healthy"})
+	})
+
+	mux.HandleFunc("/templates", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
 		templateList := make([]string, 0)
 		for name := range templates {
 			templateList = append(templateList, name)
 		}
-		c.JSON(http.StatusOK, templateList)
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(templateList)
 	})
 
-	r.GET("/configs", func(c *gin.Context) {
-		configs, err := globalStorage.GetAll()
-		if err != nil {
-			c.JSON(http.StatusBadRequest, err)
-			return
-		}
-		c.JSON(http.StatusOK, configs)
-	})
-
-	r.GET("/configs/:id", func(c *gin.Context) {
-		id := c.Param("id")
-		config, err := globalStorage.Get(id)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, err)
-			return
-		}
-		c.Data(http.StatusOK, "text/plain; charset=utf-8", []byte(config))
-	})
-
-	r.Run(fmt.Sprintf("%s:%d", listenAddr, port))
+	addr := fmt.Sprintf("%s:%d", listenAddr, port)
+	http.ListenAndServe(addr, mux)
 }
