@@ -2,6 +2,7 @@ package config
 
 import (
 	"html/template"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -26,6 +27,9 @@ func LoadTemplates(path string) error {
 			return err
 		}
 		trimmedName := strings.TrimSuffix(fullName, ".conf.tmpl")
+		if _, exists := templates[trimmedName]; exists {
+			log.Printf("Warning: Template '%s' already loaded, overwriting with %s", trimmedName, file)
+		}
 		templates[trimmedName] = tmpl
 	}
 

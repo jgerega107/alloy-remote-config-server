@@ -57,6 +57,29 @@ remotecfg {
 }
 ```
 
+### Multiple Templates
+
+You can combine multiple templates by specifying a comma-separated list in the `templates` attribute (note the plural):
+
+```alloy
+remotecfg {
+  url = "http://your-server:8888"
+  id = "web-server-01"
+  attributes = {
+    "templates" = "base,web-server,monitoring"  // Combines 3 templates
+    "env" = "prod",
+    "region" = "us-east-1"
+  }
+}
+```
+
+Templates are rendered in order and concatenated with blank line separators. This allows you to:
+- Compose configurations from reusable components
+- Layer settings (base + environment-specific + service-specific)
+- Keep templates DRY (Don't Repeat Yourself)
+
+**Note:** You can still use the singular `template` attribute for single template selection.
+
 ## Configuration
 
 Environment variables (all optional):
@@ -105,6 +128,8 @@ conf/
 ├── web-server.conf.tmpl   # Optional - for web servers
 └── database.conf.tmpl     # Optional - for databases
 ```
+
+**Note:** Template names must be unique. If multiple files resolve to the same name (e.g., `web-server.conf.tmpl` in different subdirectories), the last one loaded will overwrite the previous one and a warning will be logged.
 
 ## Security
 

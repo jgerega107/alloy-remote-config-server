@@ -30,19 +30,40 @@ func (ImplementedCollectorServiceHandler) GetConfig(
 	configID := req.Msg.GetId()
 	attributes := req.Msg.GetLocalAttributes()
 	metadata := Metadata{Id: configID, Attributes: attributes}
-	templateName, ok := attributes["template"]
+
+	// Get template names (supports comma-separated list)
+	templateNamesStr, ok := attributes["templates"]
 	if !ok {
-		templateName = "default"
+		// Fall back to single template attribute
+		templateNamesStr, ok = attributes["template"]
+		if !ok {
+			templateNamesStr = "default"
+		}
 	}
-	tmpl, ok := templates[templateName]
-	if !ok {
-		return nil, fmt.Errorf("Template %s not found", templateName)
-	}
+
+	// Parse comma-separated template names
+	templateNames := strings.Split(templateNamesStr, ",")
+
+	// Build config from all templates
 	var resolvedConfig strings.Builder
-	err := tmpl.Execute(&resolvedConfig, metadata)
-	if err != nil {
-		return nil, err
+	for i, name := range templateNames {
+		name = strings.TrimSpace(name)
+		tmpl, ok := templates[name]
+		if !ok {
+			return nil, fmt.Errorf("Template %s not found", name)
+		}
+
+		// Add separator between templates
+		if i > 0 {
+			resolvedConfig.WriteString("\n\n")
+		}
+
+		err := tmpl.Execute(&resolvedConfig, metadata)
+		if err != nil {
+			return nil, err
+		}
 	}
+
 	res := connect.NewResponse(&v1.GetConfigResponse{Content: resolvedConfig.String()})
 	return res, nil
 }
