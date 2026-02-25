@@ -1,6 +1,6 @@
 # alloy-remote-config-server
 
-![build workflow](https://github.com/opsplane-services/alloy-remote-config-server/actions/workflows/docker-publish.yml/badge.svg)
+![build workflow](https://github.com/jgerega107/alloy-remote-config-server/actions/workflows/docker-publish.yml/badge.svg)
 ![license](http://img.shields.io/badge/license-MIT-blue.svg)
 
 ## Description
