@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	connectrpc.com/connect v1.16.2
-	github.com/grafana/alloy-remote-config v0.0.10
+	github.com/grafana/alloy-remote-config v0.0.12
 	golang.org/x/net v0.26.0
 )
 
